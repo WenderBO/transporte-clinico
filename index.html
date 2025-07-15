@@ -1,106 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sistema Transporte Clínico - Beneficência Portuguesa</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f7f7f7;
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 0 10px;
-  }
-  header {
-    background: #900;
-    color: white;
-    padding: 15px;
-    border-radius: 5px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  nav {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  nav button {
-    background: #ccc;
-    border: none;
-    padding: 10px 25px;
-    margin: 0 5px;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-  nav button.active {
-    background: #900;
-    color: white;
-  }
-  .tab {
-    display: none;
-  }
-  .tab.active {
-    display: block;
-  }
-  form {
-    background: white;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0 0 8px #ccc;
-  }
-  label {
-    font-weight: bold;
-    margin-top: 10px;
-    display: block;
-  }
-  input, select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    box-sizing: border-box;
-    font-size: 1rem;
-  }
-  button[type="submit"], .btnAtender {
-    margin-top: 15px;
-    background: #900;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-  button[type="submit"]:hover, .btnAtender:hover {
-    background: #b00;
-  }
-  .historico, .pendentes {
-    background: white;
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: 0 0 8px #ccc;
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  .pedido {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #fafafa;
-    padding: 10px;
-    margin-top: 10px;
-  }
-  .pedido.atendido {
-    background: #e0ffe0;
-    border-color: #0a0;
-  }
-  .pedido strong {
-    font-size: 1.1rem;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema Transporte Clínico - BP</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 10px;
+    }
+    header {
+      background: #900;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    nav button {
+      background: #ccc;
+      border: none;
+      padding: 10px 25px;
+      margin: 0 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    nav button.active {
+      background: #900;
+      color: white;
+    }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    form {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px #ccc;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    button[type="submit"], .btnAtender {
+      margin-top: 15px;
+      background: #900;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .historico, .pendentes {
+      background: white;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 0 8px #ccc;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .pedido {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fafafa;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .pedido.atendido {
+      background: #e0ffe0;
+      border-color: #0a0;
+    }
+  </style>
 </head>
 <body>
 
@@ -114,11 +105,10 @@
   <button id="btnAtendente" type="button">Atendente</button>
 </nav>
 
-<!-- Aba Solicitante -->
 <section id="abaSolicitante" class="tab active">
   <form id="formSolicitante">
     <label for="ala">Ala</label>
-    <select id="ala" name="ala" required>
+    <select id="ala" required>
       <option value="">Selecione</option>
       <option>TERRO D</option>
       <option>1D</option>
@@ -127,25 +117,32 @@
       <option>2H</option>
       <option>3H</option>
       <option>6H</option>
-      <option>UTI5</option>
-      <option>UTI3</option>
+      <option>UTI1</option>
       <option>UTI2</option>
+      <option>UTI3</option>
+      <option>UTI4</option>
+      <option>UTI5</option>
+      <option>TOMOSANTOS</option>
+      <option>ENDOSANTOS</option>
+      <option>HEMODINAMICA</option>
+      <option>RADIOTERAPIA</option>
+      <option>NUCLEOMED</option>
       <option>CENTRO CIRÚRGICO</option>
       <option>INTERNAÇÃO</option>
       <option>REPOUSO</option>
     </select>
 
     <label for="paciente">Nome do Paciente</label>
-    <input id="paciente" type="text" name="paciente" required>
+    <input id="paciente" required>
 
     <label for="quarto">Quarto</label>
-    <input id="quarto" type="text" name="quarto" required>
+    <input id="quarto" required>
 
     <label for="exame">Tipo de Exame</label>
-    <input id="exame" type="text" name="exame" required>
+    <input id="exame" required>
 
     <label for="transporte">Tipo de Transporte</label>
-    <select id="transporte" name="transporte" required>
+    <select id="transporte" required>
       <option value="">Selecione</option>
       <option>Maca</option>
       <option>Cadeira</option>
@@ -153,30 +150,32 @@
     </select>
 
     <label for="horario">Horário</label>
-    <input id="horario" type="time" name="horario" required>
+    <input id="horario" type="time" required>
 
-    <label for="solicitanteNome">Nome do Solicitante</label>
-    <input id="solicitanteNome" type="text" name="solicitante" required>
+    <label for="solicitante">Nome do Solicitante</label>
+    <input id="solicitante" required>
 
     <button type="submit">Enviar Solicitação</button>
   </form>
 
   <div class="historico" id="historicoSolicitacoes">
     <h3>Histórico do Dia</h3>
-    <!-- Pedidos aparecem aqui -->
   </div>
 </section>
 
-<!-- Aba Atendente -->
 <section id="abaAtendente" class="tab">
   <div class="pendentes" id="listaPendentes">
     <h3>Pedidos Pendentes para Atendimento</h3>
-    <!-- Pedidos pendentes aparecem aqui -->
   </div>
 </section>
 
 <script>
-  // Elementos da UI
+  // ⚠️ Substitua por suas chaves reais do Supabase:
+  const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
+  const SUPABASE_ANON_KEY = "SUA-CHAVE-ANON";
+
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   const btnSolicitante = document.getElementById('btnSolicitante');
   const btnAtendente = document.getElementById('btnAtendente');
   const abaSolicitante = document.getElementById('abaSolicitante');
@@ -185,72 +184,22 @@
   const historicoDiv = document.getElementById('historicoSolicitacoes');
   const pendentesDiv = document.getElementById('listaPendentes');
 
-  // Alterna abas
-  btnSolicitante.addEventListener('click', () => {
+  btnSolicitante.onclick = () => {
     abaSolicitante.classList.add('active');
     abaAtendente.classList.remove('active');
     btnSolicitante.classList.add('active');
     btnAtendente.classList.remove('active');
-  });
-  btnAtendente.addEventListener('click', () => {
-    abaAtendente.classList.add('active');
+  };
+  btnAtendente.onclick = () => {
     abaSolicitante.classList.remove('active');
-    btnAtendente.classList.add('active');
+    abaAtendente.classList.add('active');
     btnSolicitante.classList.remove('active');
-  });
+    btnAtendente.classList.add('active');
+  };
 
-  // Array para guardar pedidos em memória
-  const pedidos = [];
-
-  // Função para atualizar as listas (histórico e pendentes)
-  function atualizarListas() {
-    // Atualiza histórico
-    historicoDiv.innerHTML = '<h3>Histórico do Dia</h3>';
-    pedidos.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'pedido' + (p.atendido ? ' atendido' : '');
-      div.innerHTML = `
-        <strong>${p.paciente}</strong> - Ala: ${p.ala} - Quarto: ${p.quarto}<br>
-        Exame: ${p.exame} | Transporte: ${p.transporte}<br>
-        Solicitado por: ${p.solicitante} às ${p.horario}<br>
-        ${p.atendido ? `✅ Atendido por ${p.atendente} às ${p.horarioAtendimento}` : ''}
-      `;
-      historicoDiv.appendChild(div);
-    });
-
-    // Atualiza lista pendentes
-    pendentesDiv.innerHTML = '<h3>Pedidos Pendentes para Atendimento</h3>';
-    pedidos.filter(p => !p.atendido).forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'pedido';
-      div.innerHTML = `
-        <strong>${p.paciente}</strong> - Ala: ${p.ala} - Quarto: ${p.quarto}<br>
-        Exame: ${p.exame} | Transporte: ${p.transporte}<br>
-        Solicitado por: ${p.solicitante} às ${p.horario}
-      `;
-      const btnAtender = document.createElement('button');
-      btnAtender.textContent = 'Marcar como Atendido';
-      btnAtender.className = 'btnAtender';
-      btnAtender.onclick = () => {
-        const nomeAtendente = prompt('Digite seu nome (Atendente):');
-        if (nomeAtendente && nomeAtendente.trim() !== '') {
-          p.atendido = true;
-          p.atendente = nomeAtendente.trim();
-          p.horarioAtendimento = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-          atualizarListas();
-        }
-      };
-      div.appendChild(btnAtender);
-      pendentesDiv.appendChild(div);
-    });
-  }
-
-  // Evento para enviar o formulário
-  form.addEventListener('submit', e => {
+  form.onsubmit = async (e) => {
     e.preventDefault();
-
     const novoPedido = {
-      id: Date.now(),
       ala: form.ala.value,
       paciente: form.paciente.value,
       quarto: form.quarto.value,
@@ -258,20 +207,57 @@
       transporte: form.transporte.value,
       horario: form.horario.value,
       solicitante: form.solicitante.value,
-      atendido: false,
-      atendente: null,
-      horarioAtendimento: null
+      atendido: false
     };
-
-    pedidos.push(novoPedido);
+    await supabase.from("pedidos").insert([novoPedido]);
     form.reset();
-    atualizarListas();
-  });
+    carregarPedidos();
+  };
 
-  // Inicializa as listas vazias na abertura
-  atualizarListas();
+  async function carregarPedidos() {
+    const { data: pedidos } = await supabase
+      .from("pedidos")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    historicoDiv.innerHTML = "<h3>Histórico do Dia</h3>";
+    pendentesDiv.innerHTML = "<h3>Pedidos Pendentes para Atendimento</h3>";
+
+    pedidos.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "pedido" + (p.atendido ? " atendido" : "");
+      div.innerHTML = `
+        <strong>${p.paciente}</strong> - Ala: ${p.ala} - Quarto: ${p.quarto}<br>
+        Exame: ${p.exame} | Transporte: ${p.transporte}<br>
+        Solicitado por: ${p.solicitante} às ${p.horario}<br>
+        ${p.atendido ? `✅ Atendido por ${p.atendente} às ${p.horarioAtend}` : ""}
+      `;
+
+      if (!p.atendido) {
+        const btn = document.createElement("button");
+        btn.textContent = "Marcar como Atendido";
+        btn.className = "btnAtender";
+        btn.onclick = async () => {
+          const nome = prompt("Digite o nome do atendente:");
+          if (!nome) return;
+          await supabase.from("pedidos").update({
+            atendido: true,
+            atendente: nome,
+            horarioAtend: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+          }).eq("id", p.id);
+          carregarPedidos();
+        };
+        div.appendChild(btn);
+      }
+
+      historicoDiv.appendChild(div);
+      if (!p.atendido) pendentesDiv.appendChild(div.cloneNode(true));
+    });
+  }
+
+  carregarPedidos();
 </script>
-
 </body>
 </html>
+
 
